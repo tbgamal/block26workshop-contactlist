@@ -1,5 +1,7 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import ContactRow from "./ContactRow"
+
+const APIURL = "https://jsonplaceholder.typicode.com/users"
 
 const dummyContacts =[
   { id: 1, name: "R2-D2", phone: "222-222-2222", email: "r2d2@droids.com" },
@@ -8,9 +10,24 @@ const dummyContacts =[
 ]
 
 function ContactList () {
+  const [contacts, setContacts] = useState([])
+
+  useEffect (() => {
+    async function contactFetch() {
+      try{
+        const response = await fetch(APIURL)
+        const data = await response.json()
+        setContacts(data)
+      }
+      catch(err){
+        console.error(err);
+      }
+    }
+    contactFetch()
+  }, [])
   
-  const [contacts, setContacts] = useState(dummyContacts)
-  console.log("Contacts: ", contacts)
+  // const [contacts, setContacts] = useState(dummyContacts)
+  // console.log("Contacts: ", contacts)
   return (
   <>
     <table>
